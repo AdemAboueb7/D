@@ -35,7 +35,7 @@ class EnrollmentControllerTest {
     @Test
     void testGetAllEnrollment() throws Exception {
         List<Enrollment> enrollments = Arrays.asList(
-                new Enrollment(1L, LocalDate.of(2024, 1, 15), 85.5, Status.ENROLLED, null, null),
+                new Enrollment(1L, LocalDate.of(2024, 1, 15), 85.5, Status.ACTIVE, null, null),
                 new Enrollment(2L, LocalDate.of(2024, 2, 20), 92.0, Status.COMPLETED, null, null)
         );
 
@@ -51,7 +51,7 @@ class EnrollmentControllerTest {
 
     @Test
     void testGetEnrollment() throws Exception {
-        Enrollment enrollment = new Enrollment(1L, LocalDate.of(2024, 1, 15), 85.5, Status.ENROLLED, null, null);
+        Enrollment enrollment = new Enrollment(1L, LocalDate.of(2024, 1, 15), 85.5, Status.ACTIVE, null, null);
 
         when(enrollmentService.getEnrollmentById(1L)).thenReturn(enrollment);
 
@@ -65,8 +65,8 @@ class EnrollmentControllerTest {
 
     @Test
     void testCreateEnrollment() throws Exception {
-        Enrollment toCreate = new Enrollment(null, LocalDate.of(2024, 3, 10), 78.0, Status.ENROLLED, null, null);
-        Enrollment created = new Enrollment(3L, LocalDate.of(2024, 3, 10), 78.0, Status.ENROLLED, null, null);
+        Enrollment toCreate = new Enrollment(null, LocalDate.of(2024, 3, 10), 78.0, Status.ACTIVE, null, null);
+        Enrollment created = new Enrollment(3L, LocalDate.of(2024, 3, 10), 78.0, Status.ACTIVE, null, null);
 
         when(enrollmentService.saveEnrollment(any(Enrollment.class))).thenReturn(created);
 

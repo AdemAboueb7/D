@@ -33,7 +33,7 @@ class EnrollmentServiceTest {
     @Test
     void testGetAllEnrollments() {
         List<Enrollment> enrollments = Arrays.asList(
-                new Enrollment(1L, LocalDate.of(2024, 1, 15), 85.5, Status.ENROLLED, null, null),
+                new Enrollment(1L, LocalDate.of(2024, 1, 15), 85.5, Status.ACTIVE, null, null),
                 new Enrollment(2L, LocalDate.of(2024, 2, 20), 92.0, Status.COMPLETED, null, null)
         );
 
@@ -60,7 +60,7 @@ class EnrollmentServiceTest {
 
     @Test
     void testGetEnrollmentByIdFound() {
-        Enrollment enrollment = new Enrollment(1L, LocalDate.of(2024, 1, 15), 85.5, Status.ENROLLED, null, null);
+        Enrollment enrollment = new Enrollment(1L, LocalDate.of(2024, 1, 15), 85.5, Status.ACTIVE, null, null);
         when(enrollmentRepository.findById(1L)).thenReturn(Optional.of(enrollment));
 
         Enrollment result = enrollmentService.getEnrollmentById(1L);
@@ -89,8 +89,8 @@ class EnrollmentServiceTest {
 
     @Test
     void testSaveEnrollment() {
-        Enrollment toSave = new Enrollment(null, LocalDate.of(2024, 3, 10), 78.0, Status.ENROLLED, null, null);
-        Enrollment saved = new Enrollment(3L, LocalDate.of(2024, 3, 10), 78.0, Status.ENROLLED, null, null);
+        Enrollment toSave = new Enrollment(null, LocalDate.of(2024, 3, 10), 78.0, Status.ACTIVE, null, null);
+        Enrollment saved = new Enrollment(3L, LocalDate.of(2024, 3, 10), 78.0, Status.ACTIVE, null, null);
 
         when(enrollmentRepository.save(toSave)).thenReturn(saved);
 
