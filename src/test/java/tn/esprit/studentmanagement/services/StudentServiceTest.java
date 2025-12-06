@@ -2,13 +2,13 @@ package tn.esprit.studentmanagement.services;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import tn.esprit.studentmanagement.entities.Student;
 import tn.esprit.studentmanagement.repositories.StudentRepository;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -16,91 +16,173 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class StudentServiceTest {
+@ExtendWith(MockitoExtension.class)
+public class StudentServiceTest {
 
     @Mock
-    StudentRepository studentRepository;
+    private StudentRepository studentRepository;
 
     @InjectMocks
-    StudentService studentService;
+    private StudentService studentService;
+
+    private Student student1;
+    private Student student2;
 
     @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
+    public void setUp() {
+        student1 = new Student();
+        student1.setIdStudent(1L);
+        student1.setFirstName("Nesrine");
+        student1.setLastName("Fezzani");
+
+        student2 = new Student();
+        student2.setIdStudent(2L);
+        student2.setFirstName("Ahmed");
+        student2.setLastName("Ben Ali");
     }
 
     @Test
-    void testGetAllStudents() {
-        List<Student> students = Arrays.asList(
-                new Student(1L, "John", "Doe", "john@example.com", "1234567890", LocalDate.of(2000, 1, 1), "Address 1", null, null),
-                new Student(2L, "Jane", "Smith", "jane@example.com", "0987654321", LocalDate.of(2001, 2, 2), "Address 2", null, null)
-        );
+    public void testGetAllStudents() {
+        // Arrange
+        List<Student> studentList = Arrays.asList(student1, student2);
+        when(studentRepository.findAll()).thenReturn(studentList);
 
-        when(studentRepository.findAll()).thenReturn(students);
-
+        // Act
         List<Student> result = studentService.getAllStudents();
 
+        // Assert
         assertNotNull(result);
         assertEquals(2, result.size());
-        assertEquals("John", result.get(0).getFirstName());
+        assertEquals("Nesrine", result.get(0).getFirstName());
+        assertEquals("Ahmed", result.get(1).getFirstName());
         verify(studentRepository, times(1)).findAll();
     }
 
     @Test
-    void testGetAllStudentsEmpty() {
+    public void testGetAllStudentsEmpty() {
+        // Arrange
         when(studentRepository.findAll()).thenReturn(Arrays.asList());
 
+        // Act
         List<Student> result = studentService.getAllStudents();
 
+        // Assert
         assertNotNull(result);
         assertEquals(0, result.size());
+        assertTrue(result.isEmpty());
         verify(studentRepository, times(1)).findAll();
     }
 
     @Test
-    void testGetStudentByIdFound() {
-        Student student = new Student(1L, "John", "Doe", "john@example.com", "1234567890", LocalDate.of(2000, 1, 1), "Address 1", null, null);
-        when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
+    public void testGetStudentById() {
+        // Arrange
+        when(studentRepository.findById(1L)).thenReturn(Optional.of(student1));
 
+        // Act
         Student result = studentService.getStudentById(1L);
 
+        // Assert
         assertNotNull(result);
         assertEquals(1L, result.getIdStudent());
-        assertEquals("John", result.getFirstName());
+        assertEquals("Nesrine", result.getFirstName());
+        assertEquals("Fezzani", result.getLastName());
         verify(studentRepository, times(1)).findById(1L);
     }
 
     @Test
-    void testGetStudentByIdNotFound() {
-        when(studentRepository.findById(99L)).thenReturn(Optional.empty());
+    public void testGetStudentByIdNotFound() {
+        // Arrange
+        when(studentRepository.findById(999L)).thenReturn(Optional.empty());
 
-        Student result = studentService.getStudentById(99L);
+        // Act
+        Student result = studentService.getStudentById(999L);
 
+        // Assert
         assertNull(result);
-        verify(studentRepository, times(1)).findById(99L);
+        verify(studentRepository, times(1)).findById(999L);
     }
 
     @Test
-    void testSaveStudent() {
-        Student toSave = new Student(null, "Alice", "Johnson", "alice@example.com", "5555555555", LocalDate.of(2002, 3, 3), "Address 3", null, null);
-        Student saved = new Student(3L, "Alice", "Johnson", "alice@example.com", "5555555555", LocalDate.of(2002, 3, 3), "Address 3", null, null);
+    public void testSaveStudent() {
+        // Arrange
+        when(studentRepository.save(student1)).thenReturn(student1);
 
-        when(studentRepository.save(toSave)).thenReturn(saved);
+        // Act
+        Student result = studentService.saveStudent(student1);
 
-        Student result = studentService.saveStudent(toSave);
-
+        // Assert
         assertNotNull(result);
-        assertEquals(3L, result.getIdStudent());
-        assertEquals("Alice", result.getFirstName());
-        verify(studentRepository, times(1)).save(toSave);
+        assertEquals("Nesrine", result.getFirstName());
+        assertEquals("Fezzani", result.getLastName());
+        verify(studentRepository, times(1)).save(student1);
     }
 
     @Test
-    void testDeleteStudent() {
-        doNothing().when(studentRepository).deleteById(1L);
+    public void testSaveNewStudent() {
+        // Arrange
+        Student newStudent = new Student();
+        newStudent.setFirstName("Mohamed");
+        newStudent.setLastName("Salah");
 
-        studentService.deleteStudent(1L);
+        Student savedStudent = new Student();
+        savedStudent.setIdStudent(3L);
+        savedStudent.setFirstName("Mohamed");
+        savedStudent.setLastName("Salah");
 
-        verify(studentRepository, times(1)).deleteById(1L);
+        when(studentRepository.save(newStudent)).thenReturn(savedStudent);
+
+        // Act
+        Student result = studentService.saveStudent(newStudent);
+
+        // Assert
+        assertNotNull(result);
+        assertNotNull(result.getIdStudent());
+        assertEquals("Mohamed", result.getFirstName());
+        assertEquals("Salah", result.getLastName());
+        verify(studentRepository, times(1)).save(newStudent);
+    }
+
+    @Test
+    public void testDeleteStudent() {
+        // Arrange
+        Long studentId = 1L;
+        doNothing().when(studentRepository).deleteById(studentId);
+
+        // Act
+        studentService.deleteStudent(studentId);
+
+        // Assert
+        verify(studentRepository, times(1)).deleteById(studentId);
+    }
+
+    @Test
+    public void testDeleteStudentMultipleTimes() {
+        // Arrange
+        Long studentId1 = 1L;
+        Long studentId2 = 2L;
+        doNothing().when(studentRepository).deleteById(anyLong());
+
+        // Act
+        studentService.deleteStudent(studentId1);
+        studentService.deleteStudent(studentId2);
+
+        // Assert
+        verify(studentRepository, times(1)).deleteById(studentId1);
+        verify(studentRepository, times(1)).deleteById(studentId2);
+        verify(studentRepository, times(2)).deleteById(anyLong());
+    }
+
+    @Test
+    public void testStudentRepositoryInteraction() {
+        // Arrange
+        when(studentRepository.findAll()).thenReturn(Arrays.asList(student1));
+
+        // Act
+        List<Student> students = studentService.getAllStudents();
+
+        // Assert
+        assertFalse(students.isEmpty());
+        verify(studentRepository).findAll();
+        verifyNoMoreInteractions(studentRepository);
     }
 }
