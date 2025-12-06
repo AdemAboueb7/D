@@ -1,6 +1,6 @@
 package tn.esprit.studentmanagement.services;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.studentmanagement.entities.Department;
 import tn.esprit.studentmanagement.repositories.DepartmentRepository;
@@ -8,10 +8,10 @@ import tn.esprit.studentmanagement.repositories.DepartmentRepository;
 import java.util.List;
 
 @Service
-
 public class DepartmentService implements IDepartmentService {
 
-    DepartmentRepository departmentRepository;
+    @Autowired
+    private DepartmentRepository departmentRepository;
 
     @Override
     public List<Department> getAllDepartments() {
