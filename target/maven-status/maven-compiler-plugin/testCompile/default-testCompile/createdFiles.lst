@@ -1,0 +1,7 @@
+tn\esprit\studentmanagement\entities\StudentTest.class
+tn\esprit\studentmanagement\controllers\DepartmentControllerTest.class
+tn\esprit\studentmanagement\services\DepartmentServiceTest.class
+tn\esprit\studentmanagement\services\StudentServiceTest.class
+tn\esprit\studentmanagement\StudentManagementApplicationTests.class
+tn\esprit\studentmanagement\entities\DepartmentTest.class
+tn\esprit\studentmanagement\controllers\StudentControllerTest.class
