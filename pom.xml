@@ -60,7 +60,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- 🔥 Correction nécessaire : ajoute spring-boot-test -->
+        <!--  Correction nécessaire : ajoute spring-boot-test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-test</artifactId>
