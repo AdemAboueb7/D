@@ -21,18 +21,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
 class DepartmentControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private IDepartmentService departmentService;
-
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockBean
+    private IDepartmentService departmentService;
 
     @Test
     void testGetAllDepartments() throws Exception {

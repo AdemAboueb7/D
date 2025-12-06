@@ -23,18 +23,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
 class StudentControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private IStudentService studentService;
-
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockBean
+    private IStudentService studentService;
 
     @Test
     void testGetAllStudents() throws Exception {
