@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: tn.esprit.studentmanagement.services.StudentServiceTest
 -------------------------------------------------------------------------------
-Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.153 s -- in tn.esprit.studentmanagement.services.StudentServiceTest
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.095 s -- in tn.esprit.studentmanagement.services.StudentServiceTest
